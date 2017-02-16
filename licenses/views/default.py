@@ -26,40 +26,40 @@ def my_view(request):
         s_waste = request.params['Warse']
         message = message + ' ' + s_waste
     except:
-	k=0
+        k=0
     try:
         s_code = request.params['Code'].replace(' ', '')
         print(s_code)
         message = message + ' ' + s_code
     except:
-	k=0
+        k=0
     try:
         s_class = request.params['Class']
         message = message + ' ' + s_class
     except:
-	s_class = 0
+        s_class = 0
     try:
         s_city = request.params['City'].capitalize()
         message = message + ' ' + s_city
     except:
-	k=0
+        k=0
     l=1
     if l==0:
         return Response(str(log==None), content_type='text/plain', status=500)
     if ((s_waste == '') & (s_city == '') & (s_code == '')):
         return {'list': complist, 'project': 'Licenses', 'message': '', 'log': log}
-    
+
     DBSession = Session(bind=engine)
     wastes = DBSession.query(Waste).filter(func.lower(Waste.name).like("%"+func.lower(s_waste)+"%"))
     wastes = wastes.filter(Waste.code.like("%"+s_code+"%"))
     if s_class == '':
-	wastes = wastes.all()
+        wastes = wastes.all()
     else:
         wastes = wastes.filter(Waste.danger == s_class).all()
     message = message+'wastes'+str(len(wastes))
     cities = DBSession.query(City).filter(City.name.like("%"+s_city+"%")).all()
     message = message+'wastes'+str(len(cities))
-    companies = []	
+    companies = []
     for c in cities:
         companis = DBSession.query(Company).filter(Company.city == c.id).all()
         companies.extend(companis)
@@ -74,31 +74,31 @@ def my_view(request):
     try:
         t1 = request.params['t1']
     except:
-	t1 = 0
+        t1 = 0
     try:
         t2 = request.params['t2']
     except:
-	t2 = 0
+        t2 = 0
     try:
         t3 = request.params['t3']
     except:
-	t3 = 0
+        t3 = 0
     try:
         t4 = request.params['t4']
     except:
-	t4 = 0
+        t4 = 0
     try:
         t5 = request.params['t5']
     except:
-	t5 = 0
+        t5 = 0
     try:
         t6 = request.params['t6']
     except:
-	t6 = 0
+        t6 = 0
     try:
         t7 = request.params['t7']
     except:
-	t7 = 0
+        t7 = 0
     for c in companies:
         for w in wastes:
             lic = DBSession.query(License).filter(License.waste == w.id)
@@ -132,8 +132,8 @@ def my_view(request):
             else:
                 pp=0
             lic = lic.first()
-	    if lic is not None:
-            	comps.append(lic)		 
+            if lic is not None:
+                comps.append(lic)
     for comp in comps:
         company = DBSession.query(Company).filter(comp.company == Company.id).first()
         city = DBSession.query(City).filter(company.city == City.id).first()

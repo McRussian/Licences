@@ -1,5 +1,5 @@
-Licenses README
-==================
+Licenses
+========
 
 Getting Started
 ---------------
